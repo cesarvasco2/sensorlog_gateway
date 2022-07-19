@@ -42,21 +42,25 @@ def on_message(client, userdata, msg):
     #print(payload_dict['EVENT']['DEVICE'])
     dia_semana = date.today() 
     data_e_hora_atuais = datetime.now()
-    dict_payload = {}
-    dict_payload['id_dispositivo'] = str(payload_dict['EVENT']['DEVICE']['ID'])
-    dict_payload['data_hora_dispositivo'] = data_e_hora_atuais.strftime('%Y-%m-%d %H:%M:%S')
-    dict_payload['ultra_sonico'] = str(payload_dict['EVENT']['DEVICE']['DIST']/10)
-    dict_payload['sinal'] = str(payload_dict['EVENT']['DEVICE']['RSSI'])
-    dict_payload['sinal_ruido'] =   str(payload_dict['EVENT']['DEVICE']['SNR'])
-    dict_payload['voltagem_bateria'] =  str(payload_dict['EVENT']['DEVICE']['V1']/1000)
-    dict_payload['temperatura'] =   str(payload_dict['EVENT']['DEVICE']['T1']/100)
-    dict_payload['codigo_produto'] = 20
-    dict_payload['timestamp_servidor'] = int(datetime.now().timestamp())
-    dict_payload['timestamp_dispositivo'] = int(datetime.now().timestamp())
-    dict_payload['dia_sem'] = calendar.day_name[dia_semana.weekday()]
-    print(dict_payload)
-    queue.send_message(MessageBody=str(json.dumps(dict_payload, ensure_ascii=False)))
-
+    try:
+        dict_payload = {}
+        dict_payload['id_dispositivo'] = str(payload_dict['EVENT']['DEVICE']['ID'])
+        dict_payload['data_hora_dispositivo'] = data_e_hora_atuais.strftime('%Y-%m-%d %H:%M:%S')
+        dict_payload['ultra_sonico'] = str(payload_dict['EVENT']['DEVICE']['DIST']/10)
+        dict_payload['sinal'] = str(payload_dict['EVENT']['DEVICE']['RSSI'])
+        dict_payload['sinal_ruido'] =   str(payload_dict['EVENT']['DEVICE']['SNR'])
+        dict_payload['voltagem_bateria'] =  str(payload_dict['EVENT']['DEVICE']['V1']/1000)
+        dict_payload['temperatura'] =   str(payload_dict['EVENT']['DEVICE']['T1']/100)
+        dict_payload['codigo_produto'] = 20
+        dict_payload['timestamp_servidor'] = int(datetime.now().timestamp())
+        dict_payload['timestamp_dispositivo'] = int(datetime.now().timestamp())
+        dict_payload['dia_sem'] = calendar.day_name[dia_semana.weekday()]
+        print(dict_payload)
+        queue.send_message(MessageBody=str(json.dumps(dict_payload, ensure_ascii=False)))
+    except:
+        print('Pacote quebrado')
+        pass
+    
 try:
     print('[STATUS] Inicializando MQTT...')
 #inicializa MQTT:
